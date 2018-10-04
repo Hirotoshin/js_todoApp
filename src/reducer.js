@@ -6,6 +6,7 @@ const initialState = {
 
 export function rootReducer(state=initialState, action) {
     let _state = JSON.parse(JSON.stringify(state))
+    console.log(_state);
     switch(action.type) {
         case ADD_TODO:
             _state.todo.push({
