@@ -1,6 +1,6 @@
 import React from 'react';
-import { addTodo,deleteTodo,updateTodo } from './action';
 import {connect} from 'react-redux';
+import { findTodoList,createTodo,deleteTodo, updateTodo } from './thunk/thunk';
 
 class TodoList extends React.Component {
     constructor(props) {
@@ -13,6 +13,10 @@ class TodoList extends React.Component {
         this.addTodo = this.addTodo.bind(this);
         this.deleteTodo = this.deleteTodo.bind(this);
         this.updateTodo = this.updateTodo.bind(this);
+    }
+
+    componentWillMount() {
+        this.props.fetchTodoList();
     }
 
     userInput(e) {
@@ -33,7 +37,9 @@ class TodoList extends React.Component {
     }
 
     updateTodo(index) {
-        this.props.updateTodo(index)
+        const title = this.props.todo[index].title;
+        const done = !this.props.todo[index].done;
+        this.props.updateTodo(index,title,done);
     }
 
     render() {
@@ -66,9 +72,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        addTodo: (title) => dispatch(addTodo(title)),
+        addTodo: (title) => dispatch(createTodo(title)),
         deleteTodo: (index) => dispatch(deleteTodo(index)),
-        updateTodo: (index) => dispatch(updateTodo(index)),
+        updateTodo: (index,title,done) => dispatch(updateTodo(index,title,done)),
+        fetchTodoList: () => dispatch(findTodoList)
     }
 }
 
