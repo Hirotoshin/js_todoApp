@@ -1,12 +1,15 @@
-import {addTodo,deleteTodo,updateTodo} from "./action";
+import {addTodo,deleteTodo,updateTodo,fetchTodo} from "./action";
 import React from 'react';
 import {connect} from 'react-redux'
+import {findTodoList} from "./thunk/thunk";
+import {createTodoList} from "./thunk/thunk";
+import {deleteTodoList} from "./thunk/thunk";
+import {updateTodoList} from "./thunk/thunk";
 
 
 class TodoList extends React.Component{
     constructor(props){
         super(props);
-
         this.addTodo = this.addTodo.bind(this)
         this.deleteTodo = this.deleteTodo.bind(this)
         this.updateTodo = this.updateTodo.bind(this)
@@ -14,13 +17,19 @@ class TodoList extends React.Component{
 
     addTodo(){
         this.props.addTodo(this.refs.newText.value);
+        this.refs.newText.value = "";
     }
     deleteTodo(i){
         console.log(i)
         this.props.deleteTodo(i);
     }
     updateTodo(i){
-        this.props.updateTodo(i);
+        const title = this.props.todo[i].title
+        const done = !this.props.todo[i].done
+        this.props.updateTodo(title,done,i);
+    }
+    componentWillMount(){
+        this.props.fetchTodo();
     }
 
     render(){
@@ -59,9 +68,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        addTodo:(title)=>dispatch(addTodo(title)),
-        deleteTodo:(index)=>dispatch(deleteTodo(index)),
-        updateTodo:(index)=>dispatch(updateTodo(index))
+        addTodo:(title)=>dispatch(createTodoList(title)),
+        deleteTodo:(index)=>dispatch(deleteTodoList(index)),
+        updateTodo:(title,done,index)=>dispatch(updateTodoList(title,done,index)),
+        fetchTodo:() => dispatch(findTodoList)
+
     }
 }
 
