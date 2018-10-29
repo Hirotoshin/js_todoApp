@@ -22,7 +22,7 @@ export const findTodoList = (dispatch,getState) =>{
 export const createTodoList = (title) => (dispatch,getState) =>{
     const method = "POST";
     const headers = {
-        "COntent-Type":"application/json"
+        "Content-Type":"application/json"
     };
     const body = JSON.stringify({
         title:title

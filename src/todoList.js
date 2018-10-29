@@ -57,7 +57,6 @@ class TodoList extends React.Component{
             </div>
         );
     }
-
 }
 
 function mapStateToProps(state) {
